@@ -5,11 +5,11 @@ import numpy as np
 import os.path
 
 
-def data_handling(file, X, Y, x_max):
+def data_handling(file, X, Y, prediction_range):
     df = pd.read_csv(file) if os.path.splitext(file)[1] == '.csv' else pd.read_excel(file)
     x = df[X].iloc[0:len(df[X])].tolist()
     y = df[Y].iloc[0:len(df[Y])].tolist()
-    domain = np.array([min(x), x_max]) if x_max != 0 else np.array([min(x), max(x)])
+    domain = np.array([min(x), prediction_range]) if prediction_range != 0 else np.array([min(x), max(x)])
     return x, y, domain
 
 
@@ -46,9 +46,22 @@ def plot_handling(data, model, x_label, y_label, title):
     plt.show()
 
 
-def main(xlsx_file, X, Y, x_max, population_or_sample, title):
-    data = data_handling(xlsx_file, X, Y, x_max)
+def main(file, X, Y, prediction_range, population_or_sample, title):
+    data = data_handling(file, X, Y, prediction_range)
     plot_handling(data, linear_regression(data, population_or_sample), X, Y, title)
 
 
-main('./data.xlsx', 'Age', 'Glucose level', 100, 'population', 'Glucose level compared to age of patient')
+def handler():
+    file = str(input('Type file path: '))
+    x = str(input('Type in x axis: '))
+    y = str(input('Type in y axis: '))
+    prediction_range = int(input('Type in range of regression line: '))
+    population_or_sample = str(input('Type if data is population or sample: '))
+    title = str(input('Type in name of plot: '))
+    return file, x, y, prediction_range, population_or_sample, title
+
+
+results = handler()
+
+
+main(results[0], results[1], results[2], results[3], results[4], results[5])
