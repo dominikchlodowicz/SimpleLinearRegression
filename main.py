@@ -2,10 +2,11 @@ import math as m
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os.path
 
 
-def data_handling(xlsx_file, X, Y, x_max):
-    df = pd.read_excel(xlsx_file)
+def data_handling(file, X, Y, x_max):
+    df = pd.read_csv(file) if os.path.splitext(file)[1] == '.csv' else pd.read_excel(file)
     x = df[X].iloc[0:len(df[X])].tolist()
     y = df[Y].iloc[0:len(df[Y])].tolist()
     domain = np.array([min(x), x_max]) if x_max != 0 else np.array([min(x), max(x)])
